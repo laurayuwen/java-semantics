@@ -212,16 +212,16 @@ syntax LocMetadata ::= "LocalLocMetadata"   [latex(\terminal{Local})]
 
 //todo: why does this pure syntax definition affect krun?
 //PackageName, AmbName and PackageorTypeName syntax doesn't cause problems
-                    syntax PackageName ::= List{Id,"."} [seqstrict, klabel('PackageName)]
+//breaks if any other syntax is added
+//                    syntax PackageName ::= List{Id,"."} [seqstrict, klabel('PackageName)]
 //                     syntax ExprName::= Id  [strict, klabel('ExprName)]
 //                                         |AmbName "." Id [strict, klabel('ExprName)]
-//breaks if any other syntax is added
-                     syntax TypeName ::= Id [strict, klabel('TypeName)]
-                                         |PackageOrTypeName "." Id [strict, klabel('TypeName)]
-                     syntax AmbName ::= Id [strict, klabel('AmbName)]
-                                         |AmbName "." Id [strict, klabel('AmbName)]
+//                     syntax TypeName ::= Id [strict, klabel('TypeName)]
+//                                         |PackageOrTypeName "." Id [strict, klabel('TypeName)]
+//                     syntax AmbName ::= Id [strict, klabel('AmbName)]
+//                                         |AmbName "." Id [strict, klabel('AmbName)]
 //                     syntax MethodName ::= Id [strict,klabel('MethodName)]
 //                                            |AmbName "." Id [strict,klabel('MethodName)]
-                     syntax PackageOrTypeName ::= Id [strict,klabel('PackageOrTypeName)]
-                                                   |PackageOrTypeName "." Id [strict,klabel('PackageOrTypeName)]
+//                     syntax PackageOrTypeName ::= Id [strict,klabel('PackageOrTypeName)]
+//                                                   |PackageOrTypeName "." Id [strict,klabel('PackageOrTypeName)]
 endmodule

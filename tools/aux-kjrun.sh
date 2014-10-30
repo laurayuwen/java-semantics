@@ -255,9 +255,9 @@ if [[ ${CMD_SUFFIX} != "" ]]; then
 fi
 
 if [[ ${VERBOSE} == true ]]; then
-  echo "KRUN cmd:"
-  echo ${KRUN_CMD}
-  echo
+#  echo "KRUN cmd:"
+  echo ${KRUN_CMD} >> kruncmd.txt
+#  echo
 fi
 
 # Actual command evaluation

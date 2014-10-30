@@ -30,7 +30,7 @@ For more options use aux-kjrun.sh
   --pattern=<PATTERN>  Search pattern. May be used in combination with any option
   --ltlmc=<LTL Formula> LTL formula to model-check. If specified, --pattern option is reset.
   --config - Display the full configuration.
-  -v | --verbose  Print produced commands for aux-kjrun and krun
+  -v | --verbose  Print produced commands for aux-kjrun (in terminal) and krun (in independent file kruncmd.txt)
   -c | --clean    Delete cache files after execution
   -t | --timeout=<timeout in s> - overwrites default timeout
 EOF
@@ -219,7 +219,7 @@ if [[ ${PREP_FIRST} == true ]]; then
   if [ ! -e ${PKAST_FILE} ]; then
     CMD="aux-kjrun.sh --time=${TIME} --timeout=${TIMEOUT} --mode=run-prep-ast --output=${PREP_OUTPUT} \
       --cmd-suffix=\"${PREP_AST_CMD_SUFFIX}\" \
-      --input=${PREP_INPUT} --verbose=false ${JAVA_FILE} > ${PKAST_FILE}"
+      --input=${PREP_INPUT} --verbose=${VERBOSE} ${JAVA_FILE} > ${PKAST_FILE}"
     if [[ ${VERBOSE} == true ]]; then
       echo "PREP cmd:"
       echo ${CMD}
