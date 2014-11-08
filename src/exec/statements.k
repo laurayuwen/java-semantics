@@ -358,7 +358,7 @@ rule [Throw]:
     (. => checkCatch(subtype(typeOf(TV), T)))
 //    ~> 'Throw(TV:TypedVal)
     ~> throw TV:TypedVal;
-    ~> catchBlocks([catchImpl(T:Type X:Id,_),, _])
+    ~> catchBlocks([catchImpl('Param([.KList] T:Type X:Id),_),, _])
 
 syntax KItem ::= checkCatch ( K )
 context checkCatch(HOLE)
@@ -410,23 +410,30 @@ rule [Throw-CausesThreadTermination]:
     <stack> .List </stack>
 
 //@ \subsection{Try statement}
+//todo: move macro
+rule 'Try(Trys:K,,([Catches:KList] => toCatchClauses([Catches], .CatchClauses )),,FinallyS:K)
+rule 'Try(Trys:K,,([Catches:KList] => toCatchClauses([Catches], .CatchClauses )))
+
+syntax CatchClauses ::= toCatchClauses( KListWrap , CatchClauses ) [function]
+rule toCatchClauses([KLCatchClauses:KList,, C:CatchClause], CatchClauses:CatchClauses) => toCatchClauses([KLCatchClauses], (C CatchClauses))
+rule toCatchClauses([.KList], CatchClauses:CatchClauses) => CatchClauses
 
 rule [Try-Catch-Finally-Desugar]:
-    try TryS:K [K:K,, Ks:KList] finally FinallyS:K
-    => try {try TryS [K,,Ks]} [.KList] finally FinallyS
+    try TryS:K (K:CatchClause Ks:CatchClauses) finally FinallyS:K
+    => try {try TryS (K Ks)} .CatchClauses finally FinallyS
         [structural]
 
 /*@ \subsubsection{Execution of try-catch} JLS \$14.20.1
 */
 
 //resolve the catch clauses of try statement
-context try _:K [_,, HOLE,, _]
+//context try _:K [_,, HOLE,, _]
 
 //resolve 'Param term of the catch clause
 
-context catch(HOLE)_                                [result(ExtKResult)]
+//context catch(HOLE)_                                [result(ExtKResult)]
 
-rule catch(KR:Param)S:K => catchImpl(KR,S)
+rule 'Catch(KR:Param,,S:K) => catchImpl(KR,S)
 
 /*@ Extended K Result.
   Represents KLabels that should be treated as KResult during execution phase, but not during elaboration phase.
@@ -435,7 +442,7 @@ syntax ExtKResult ::= "dummy"
 
 rule isExtKResult(KR:KResult) => true
 
-rule isExtKResult(T:Type _:Id) => true
+rule isExtKResult(_:K T:Type _:Id) => true
 
 //@ Internal representation of a preprocessed catch clause
 syntax KResult ::=  catchImpl (
@@ -444,24 +451,24 @@ syntax KResult ::=  catchImpl (
                     )
 
 rule [Try-Catch]:
-    try TryS:K [KRs:KList] => TryS ~> catchBlocks([KRs])
-when isKResult(KRs)
+    try TryS:K KRs:KResult => TryS ~> catchBlocks(KRs)
+//when isKResult(KRs)
 
 /*@ The auxiliary construct that holds catch clauses
 after try clause has been moved to the top of computation*/
-syntax KItem ::= catchBlocks ( KListWrap ) //arg - list of catchImpl
+syntax KItem ::= catchBlocks ( K ) //arg - list of catchImpl
 
 /*@ If try clause executed without raising an exception, this construct will reach the top of computation.
     In this case it should be discarded.
 */
 rule [catchBlocks-Discard]:
-    catchBlocks([_]) => .K
+    catchBlocks(_) => .K
 
 /*@ \subsubsection{Execution of try-finally} JLS \$14.20.2
 */
 
 rule [Try-Finally]:
-    try TryS:K [.KList] finally FinallyS:K => TryS ~> finallyBlock(FinallyS)
+    try TryS:K .CatchClauses finally FinallyS:K => TryS ~> finallyBlock(FinallyS)
 
 /*@ The auxiliary construct that holds finally clause
 after try clause has been moved to the top of computation*/

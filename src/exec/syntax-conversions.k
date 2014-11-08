@@ -11,10 +11,10 @@ module SYNTAX-CONVERSIONS
 /*@ \subsection{Method parameter}*/
 
 // 'Param(\_:K,, T:Type,, X:Id). Consumed by initParams().
-syntax KLabel ::= "'Param"
+//syntax KLabel ::= "'Param"
 
 //Required for catch, 'Param cannot be added as klabel attribute for Param ::= Type Id
-rule 'Param(_,, K:Type,, X:Id) => K X [structural]
+//rule 'Param(_,, K:Type,, X:Id) => K X           [structural]
 
 syntax Params ::= List{Param, ","}
 
@@ -22,11 +22,11 @@ syntax KItem ::= toParams( KListWrap )          [function]
            | toParams( KListWrap , Params ) [function]
 
 rule toParams([KLParams:KList]) => toParams([KLParams], .Params)
-rule toParams([KLParams:KList,, 'Param(_,, K:Type,, X:Id)], Params:Params) => toParams([KLParams], (K X,Params))
+rule toParams([KLParams:KList,, 'Param(A:K,, K:Type,, X:Id)], Params:Params) => toParams([KLParams], ('Param(A K X),Params))
 rule toParams([.KList], Params:Params) => Params
 
 // Required for getTypes()
-rule typeOf(T:Type _:Id) => T
+rule typeOf('Param(_:K,,T:Type,,_:Id)) => T
 
 /*@ \subsection{Method invocation}*/
 
