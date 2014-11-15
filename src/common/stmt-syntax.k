@@ -41,17 +41,12 @@ syntax SwitchLabel ::= "case" Exp ":" [strict, klabel('Case)]
 		               |"default:" [klabel('Default)]
 syntax SwitchBlock::= "{" KListWrap KListWrap "}" [klabel('SwitchBlock)]
 syntax DoStmt ::="do" "{" K "}" "while" "(" K ")"[strict(2),klabel('DoWhile)]
-syntax TryStmt ::= "try" Block KListWrap "finally" Block [klabel('Try)]
-		           |"try" Block KListWrap [klabel('Try)]
-		           |"catch" "(" K ")" Block [klabel('Catch)]
+syntax TryStmt ::= "try" Block CatchClauses "finally" Block [klabel('Try)]
+		           |"try" Block CatchClauses [klabel('Try)]
+		       syntax CatchClause ::="catch" "(" K ")" K [klabel('Catch)]
 		           //todo:catches
-	//syntax Catches ::= List{CatchClause,""}
-//syntax KItem ::= toCatches( KListWrap )          [function]
-//           | toCatches( KListWrap , Catches ) [function]
-//rule [L:KList,,C:CatchClause] => toCatches([L,,C])
-//rule toCatches([KLCatches:KList]) => toCatches([KLCatches],.Catches)
-//rule toCatches([KLCatches:KList,, C:CatchClause], Catches:Catches) => toCatches([KLCatches], (C Catches))
-//rule toCatches([.KList], Catches:Catches) => Catches
+	syntax CatchClauses ::= List{CatchClause,""} [strict]
+
 
 syntax StackConsumerStmt ::= "dummyStackConsumerStmt"|ThrowStmt|ContinueStmt|BreakStmt|ReturnStmt
 syntax ThrowStmt ::= "throw" K ";" [strict, klabel('Throw)]
