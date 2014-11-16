@@ -421,7 +421,7 @@ rule [Try-Catch-Finally-Desugar]:
 //macro
 rule 'Try(Trys:K,,([Catches:KList] => toCatchClauses([Catches])),,FinallyS:K)
 rule 'Try(Trys:K,,([Catches:KList] => toCatchClauses([Catches])))
-
+syntax CatchClause ::="catch" "(" K ")" K [klabel('Catch)]
 syntax CatchClauses ::= toCatchClauses( KListWrap )          [function]
                         | toCatchClauses( KListWrap , CatchClauses ) [function]
 

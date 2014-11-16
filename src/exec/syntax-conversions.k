@@ -17,7 +17,7 @@ syntax KLabel ::= "'Param"
 rule 'Param(_,, K:K,, X:Id) => P{K X} [structural]
 
 //add P to {} in case of ambiguity
-syntax Param ::= "P{" K Id "}"        [klabel('ParamImpl)]
+
 
 syntax Params ::= List{Param, ","}
 

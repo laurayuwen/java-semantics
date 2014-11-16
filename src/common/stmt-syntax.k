@@ -43,8 +43,9 @@ syntax SwitchBlock::= "{" KListWrap KListWrap "}" [klabel('SwitchBlock)]
 syntax DoStmt ::="do" "{" K "}" "while" "(" K ")"[strict(2),klabel('DoWhile)]
 syntax TryStmt ::= "try" Block CatchClauses "finally" Block [klabel('Try)]
 		           |"try" Block CatchClauses [klabel('Try)]
-		       syntax CatchClause ::="catch" "(" K ")" K [klabel('Catch)]
-		           //todo:catches
+		           syntax Param ::= "P{" K Id "}"        [klabel('ParamImpl)]
+		       syntax CatchClause ::="catch" "(" Param ")" Block [klabel('Catch)]
+
 	syntax CatchClauses ::= List{CatchClause,""} [strict]
 
 
@@ -59,4 +60,3 @@ syntax SynchronizedStmt ::= "synchronized" "(" Exp ")" Block [strict(1),klabel('
 syntax ExprStmt ::= Exp ";"  [strict, klabel('ExprStm)]
 
 endmodule
-
